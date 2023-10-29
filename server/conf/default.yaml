@@ -1,0 +1,45 @@
+# 服务配置
+SERVER:
+  # https 域名，必填
+  URL: https://example.com
+  # 签名任务并发量
+  MAXJOB: 10
+  # 清理旧数据倒计时（小时）
+  CLEANOLDDATA: 2
+  # 开发模式 debug,release,test
+  RUNMODE: debug
+  # 读超时/s
+  READTIMEOUT: 0
+  # 写超时/s
+  WRITETIMEOUT: 0
+  # 端口，当开启 TLS 时将锁定为 443
+  HTTPPORT: 8888
+  # 开启 https true,false
+  TLS: false
+  # 自动配置 Let's Encrypt 证书
+  AUTOTLS: true
+  # 填写你自己的邮箱
+  ACMEEMAIL: foo@bar.com
+  # 公钥路径
+  CRT:
+  # 私钥路径
+  KEY:
+
+# 日志配置
+LOG:
+  # 日志输出等级 fatal,error,warn,info,debug
+  LEVEL: debug
+
+# mysql 配置（可选）
+# 配置内容参考: https://gorm.io/zh_CN/docs/connecting_to_the_database.html
+MYSQL:
+  # 是否启用，不启用默认使用 sqlLite
+  ENABLE: false
+  # 连接驱动
+  DSN: root:123456@tcp(127.0.0.1:3306)/db_default?charset=utf8mb4&parseTime=True&loc=Local
+  # 空闲连接池中连接的最大数量
+  MAXIDLE: 10
+  # 打开数据库连接的最大数量
+  MAXOPEN: 10
+  # 连接可复用的最大时间/单位分钟
+  MAXLIFETIME: 60

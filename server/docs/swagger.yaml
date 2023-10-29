@@ -1,0 +1,703 @@
+definitions:
+  api.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  caches.KeyInfo:
+    properties:
+      enable_key:
+        type: boolean
+    type: object
+  caches.OSSInfo:
+    properties:
+      enable_oss:
+        type: boolean
+      oss_access_key_id:
+        type: string
+      oss_access_key_secret:
+        type: string
+      oss_bucket_name:
+        type: string
+      oss_endpoint:
+        type: string
+    type: object
+  req.IPABody:
+    properties:
+      summary:
+        type: string
+      uuid:
+        type: string
+    required:
+    - summary
+    - uuid
+    type: object
+  req.KeyCr:
+    properties:
+      num:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  req.KeyUp:
+    properties:
+      num:
+        type: integer
+      username:
+        type: string
+    required:
+    - username
+    type: object
+  req.UserPW:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  sign.CrtAndKeyInfo:
+    properties:
+      cert_chain_crt_content:
+        type: string
+      server_crt_content:
+        type: string
+      server_key_content:
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+  title: ipashare 后端服务接口文档
+  version: "1.0"
+paths:
+  /api/v1/appleDeveloper:
+    delete:
+      parameters:
+      - description: iss
+        in: query
+        name: iss
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除指定苹果开发者账号
+      tags:
+      - AppleDeveloper
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 页面大小
+        in: query
+        name: page_size
+        type: integer
+      - description: 搜索内容
+        in: query
+        name: content
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取苹果开发者账号列表
+      tags:
+      - AppleDeveloper
+    patch:
+      parameters:
+      - description: iss
+        in: query
+        name: iss
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: enable
+        in: query
+        name: enable
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 苹果开发者账号设置
+      tags:
+      - AppleDeveloper
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: p8
+        in: formData
+        name: p8
+        required: true
+        type: file
+      - description: iss
+        in: formData
+        name: iss
+        required: true
+        type: string
+      - description: kid
+        in: formData
+        name: kid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 上传苹果开发者账号
+      tags:
+      - AppleDeveloper
+  /api/v1/appleDevice:
+    get:
+      parameters:
+      - description: iss
+        in: query
+        name: iss
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取苹果开发者账号绑定的设备列表
+      tags:
+      - AppleDevice
+    post:
+      parameters:
+      - description: iss
+        in: query
+        name: iss
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新苹果开发者账号绑定的设备列表
+      tags:
+      - AppleDevice
+  /api/v1/appleDevice/udid/{uuid}:
+    post:
+      consumes:
+      - text/xml
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 获取 UDID（苹果服务器回调）
+      tags:
+      - AppleDevice
+  /api/v1/appstore/{uuid}:
+    get:
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: APP 下载页面
+      tags:
+      - Appstore
+  /api/v1/conf/key:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询Key配置
+      tags:
+      - Conf
+    post:
+      parameters:
+      - description: 登录信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/caches.KeyInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改Key配置
+      tags:
+      - Conf
+  /api/v1/conf/mobileconfig:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询MobileConfig配置
+      tags:
+      - Conf
+    post:
+      parameters:
+      - description: 证书信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/sign.CrtAndKeyInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改MobileConfig配置
+      tags:
+      - Conf
+  /api/v1/conf/oss:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询OSS配置
+      tags:
+      - Conf
+    post:
+      parameters:
+      - description: 登录信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/caches.OSSInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改OSS配置
+      tags:
+      - Conf
+  /api/v1/conf/oss/verify:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 校验OSS
+      tags:
+      - Conf
+  /api/v1/download/icon/{uuid}:
+    get:
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 下载icon服务
+      tags:
+      - Download
+  /api/v1/download/ipa/{uuid}:
+    get:
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 下载IPA服务
+      tags:
+      - Download
+  /api/v1/download/mobileConfig/{uuid}:
+    get:
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 下载mobileconfig服务
+      tags:
+      - Download
+  /api/v1/download/plist/{uuid}:
+    get:
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 下载Plist服务
+      tags:
+      - Download
+  /api/v1/download/tempipa/{uuid}:
+    get:
+      parameters:
+      - description: uuid
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 下载TempIPA服务
+      tags:
+      - Download
+  /api/v1/ipa:
+    delete:
+      parameters:
+      - description: uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除指定IPA
+      tags:
+      - IPA
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 页面大小
+        in: query
+        name: page_size
+        type: integer
+      - description: 搜索内容
+        in: query
+        name: content
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取 IPA 列表
+      tags:
+      - IPA
+    patch:
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/req.IPABody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 更改指定IPA简介
+      tags:
+      - IPA
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: ipa
+        in: formData
+        name: ipa
+        required: true
+        type: file
+      - description: summary
+        in: formData
+        name: summary
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 上传 IPA
+      tags:
+      - IPA
+  /api/v1/key:
+    delete:
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除指定Key
+      tags:
+      - Key
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 页面大小
+        in: query
+        name: page_size
+        type: integer
+      - description: 搜索内容
+        in: query
+        name: content
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取 Key 列表
+      tags:
+      - Key
+    post:
+      parameters:
+      - description: Key信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/req.KeyCr'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建 Key
+      tags:
+      - Key
+  /api/v1/key/changenum:
+    post:
+      parameters:
+      - description: Key 信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/req.KeyUp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改 Key Num
+      tags:
+      - Key
+  /api/v1/user/changepw:
+    post:
+      parameters:
+      - description: 登录信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/req.UserPW'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改密码
+      tags:
+      - User
+  /api/v1/user/login:
+    post:
+      parameters:
+      - description: 登录信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/req.UserPW'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 登录
+      tags:
+      - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

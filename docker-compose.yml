@@ -1,0 +1,16 @@
+version: '3'
+services:
+  server:
+    image: togettoyou/ipashare:latest
+    ports:
+      - "8888:8888"
+    volumes:
+      - $PWD/data:/root/togettoyou/data
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    environment:
+      - SERVER_URL=https://example.com
+      - SERVER_HTTPPORT=8888
+      - SERVER_MAXJOB=10
+      - SERVER_RUNMODE=release
+      - LOG_LEVEL=info

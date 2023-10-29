@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>APP安装页面</title>
+  </head>
+  <body style="text-align: center">
+    <img
+      style="width: 87px; height: 87px"
+      src="{{ .Icon }}"
+      alt="该APP暂无Icon"
+    />
+    <h4>{{ .Name }}</h4>
+    <div>
+      <p>{{ .Version }}</p>
+      <p>{{ .BundleIdentifier }}</p>
+      <p>{{ .Summary }}</p>
+      <p>提示：点击安装APP后可到桌面查看安装进度</p>
+    </div>
+    <a
+      href="itms-services://?action=download-manifest&amp;url={{ .Plist }}"
+      style="
+        width: 80%;
+        background-color: #008cba;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+      "
+    >
+      安装APP
+    </a>
+  </body>
+</html>
